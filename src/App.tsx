@@ -35,11 +35,55 @@ type Service = {
 };
 
 type PolicyContent = {
-  title: string;
-  intro: string;
+  mode?: "single";
   text: string[];
 };
 
+type PolicySection = {
+  heading: string | null;
+  body: string[];
+};
+function isPolicyHeading(line: string) {
+  const value = line.trim();
+
+  if (!value) return false;
+
+  if (/^Artikel\s+\d+[:]?/i.test(value)) return true;
+  if (/^\d+\.\s+(?!\d)/.test(value)) return true;
+
+  const looksLikePlainHeading =
+    !/[.!?]$/.test(value) &&
+    value.length <= 90 &&
+    !/^\d+\.\d+/.test(value);
+
+  return looksLikePlainHeading;
+}
+
+function buildPolicySections(lines: string[]): PolicySection[] {
+  const cleanLines = lines.map((line) => line.trim()).filter(Boolean);
+
+  const sections: PolicySection[] = [];
+  let current: PolicySection = { heading: null, body: [] };
+
+  const pushCurrent = () => {
+    if (current.heading || current.body.length) {
+      sections.push(current);
+    }
+  };
+
+  for (const line of cleanLines) {
+    if (isPolicyHeading(line)) {
+      pushCurrent();
+      current = { heading: line, body: [] };
+    } else {
+      current.body.push(line);
+    }
+  }
+
+  pushCurrent();
+
+  return sections.length ? sections : [{ heading: null, body: cleanLines }];
+}
 type IntakeModalProps = {
   isOpen: boolean;
   title: string;
@@ -605,6 +649,77 @@ function IntakeModal({
 }
 
 function PolicyOverlay({ activePolicy, onClose }: { activePolicy: PolicyKey | null; onClose: () => void }) {
+  const policy = useMemo(() => (activePolicy ? policyContent[activePolicy] : null), [activePolicy]);
+
+  const title = policy?.text?.[0] ?? "";
+  const intro = policy?.text?.[1] ?? "";
+  const contentLines = policy?.text?.slice(2) ?? [];
+  const sections = useMemo(() => buildPolicySections(contentLines), [contentLines]);
+
+  if (!policy) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative flex h-[88vh] w-full max-w-6xl flex-col overflow-hidden rounded-[30px] border border-white/10 bg-slate-950 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="border-b border-white/10 bg-slate-950/95 px-6 py-5 backdrop-blur sm:px-8">
+          <div className="flex items-start justify-between gap-4">
+            <div className="max-w-3xl">
+              <div className="text-xs uppercase tracking-[0.22em] text-emerald-300">Beleidsdocument</div>
+              <h3 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">{title}</h3>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">{intro}</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white"
+            >
+              Sluiten
+            </button>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto bg-slate-900/60 px-6 py-6 sm:px-8">
+          <div className="space-y-4">
+            {sections.map((section, index) => (
+              <section
+                key={`${section.heading ?? "section"}-${index}`}
+                className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5 shadow-lg shadow-slate-950/10"
+              >
+                {section.heading && (
+                  <div className="border-b border-white/10 pb-3">
+                    <h4 className="text-lg font-semibold text-white">{section.heading}</h4>
+                  </div>
+                )}
+
+                <div className={section.heading ? "mt-4 space-y-3" : "space-y-3"}>
+                  {section.body.map((line, lineIndex) =>
+                    line.startsWith("- ") ? (
+                      <div key={lineIndex} className="flex items-start gap-3">
+                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                        <p className="text-sm leading-7 text-slate-300">{line.replace(/^- /, "")}</p>
+                      </div>
+                    ) : (
+                      <p key={lineIndex} className="text-sm leading-7 text-slate-300">
+                        {line}
+                      </p>
+                    )
+                  )}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
   const policy = useMemo(() => (activePolicy ? policyContent[activePolicy] : null), [activePolicy]);
   if (!policy) return null;
 
