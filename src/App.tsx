@@ -647,7 +647,6 @@ function IntakeModal({
     </div>
   );
 }
-
 function PolicyOverlay({ activePolicy, onClose }: { activePolicy: PolicyKey | null; onClose: () => void }) {
   const policy = useMemo(() => (activePolicy ? policyContent[activePolicy] : null), [activePolicy]);
 
@@ -720,32 +719,6 @@ function PolicyOverlay({ activePolicy, onClose }: { activePolicy: PolicyKey | nu
     </div>
   );
 }
-  const policy = useMemo(() => (activePolicy ? policyContent[activePolicy] : null), [activePolicy]);
-  if (!policy) return null;
-
-  return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm" onClick={onClose}>
-      <div className="relative flex h-[88vh] w-full max-w-5xl flex-col overflow-hidden rounded-[28px] border border-white/10 bg-slate-950 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-start justify-between border-b border-white/10 bg-slate-950/95 px-6 py-5 backdrop-blur">
-          <div>
-            <div className="text-xs uppercase tracking-[0.22em] text-slate-400">Beleidsdocument</div>
-            <h3 className="mt-2 text-2xl font-semibold text-white">{policy.title}</h3>
-            <p className="mt-2 text-sm leading-6 text-slate-300">{policy.intro}</p>
-          </div>
-          <button type="button" onClick={onClose} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300">
-            Sluiten
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto bg-slate-900/60 px-6 py-6 sm:px-8">
-          <div className="whitespace-pre-line rounded-[24px] border border-white/10 bg-white/[0.03] p-6 text-sm leading-8 text-slate-300">
-            {policy.text.join("\n\n")}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function FidialWebsiteDraft() {
   const [selectedService, setSelectedService] = useState<RequestType | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
