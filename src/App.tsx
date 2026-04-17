@@ -190,8 +190,6 @@ voorwaarden: {
   title: "Algemene voorwaarden",
   intro: "Hieronder vindt u de algemene voorwaarden die op onze dienstverlening van toepassing zijn.",
   text: [
-      "Algemene voorwaarden van Fidial",
-      "Hieronder vindt u de algemene voorwaarden die op onze dienstverlening van toepassing zijn.",
       "Artikel 1: Definities",
       "1.1. In deze algemene voorwaarden worden de hiernavolgende termen in de navolgende betekenis gebruikt, tenzij uitdrukkelijk anders is aangegeven.",
       "Gebruiker: FIDIAL is de gebruiker van de algemene voorwaarden.",
@@ -309,10 +307,10 @@ voorwaarden: {
       "25.2. Van toepassing is steeds de laatst gepubliceerde versie c.q. de versie zoals die gold ten tijde van het tot stand komen van de overeenkomst.",
     ],
   },
-  cookies: {
-    mode: "single",
-    text: [
-      "Cookieverklaring Fidial",
+cookies: {
+  title: "Cookieverklaring",
+  intro: "Op deze pagina leest u de volledige cookieverklaring van Fidial.",
+  text: [
       "Laatst bijgewerkt: 14 april 2026",
       "Fidial maakt op haar website gebruik van cookies en vergelijkbare technieken. In deze cookieverklaring leggen wij uit welke cookies wij gebruiken, waarom wij dat doen en welke keuzes u daarbij heeft.",
       "1. Wat zijn cookies?",
@@ -342,11 +340,11 @@ voorwaarden: {
       "Heeft u vragen over deze cookieverklaring of over het gebruik van cookies op de website van Fidial? Neem dan contact op via cs@fidial.nl of privacy@fidial.nl.",
     ],
   },
-  disclaimer: {
-    mode: "single",
-    text: [
-      "Disclaimer",
-      "Op het gebruik van deze website (www.fidial.nl) zijn onderstaande gebruiksvoorwaarden van toepassing. Door gebruik te maken van deze website, wordt u geacht kennis te hebben genomen van de gebruiksvoorwaarden en deze te hebben aanvaard.",
+disclaimer: {
+  title: "Disclaimer",
+  intro: "Op het gebruik van deze website zijn onderstaande gebruiksvoorwaarden van toepassing.",
+  text: [
+      "Door gebruik te maken van deze website, wordt u geacht kennis te hebben genomen van de gebruiksvoorwaarden en deze te hebben aanvaard.",
       "Gebruik van informatie",
       "Fidial streeft ernaar op deze website altijd juiste en actuele informatie aan te bieden. Hoewel deze informatie met de grootst mogelijke zorgvuldigheid is samengesteld, staat Fidial niet in voor de volledigheid, juistheid of actualiteit van de informatie.",
       "De juridische informatie op de website is van algemene aard en kan niet worden beschouwd als een vervanging van juridisch advies.",
@@ -365,10 +363,10 @@ voorwaarden: {
       "Deze disclaimer kan van tijd tot tijd wijzigen.",
     ],
   },
-  privacy: {
-    mode: "single",
-    text: [
-      "Privacybeleid Fidial",
+privacy: {
+  title: "Privacybeleid",
+  intro: "Op deze pagina leest u hoe Fidial omgaat met persoonsgegevens en privacy.",
+  text: [
       "Laatst bijgewerkt: 14 april 2026",
       "Fidial respecteert uw privacy en verwerkt persoonsgegevens in overeenstemming met de Algemene verordening gegevensbescherming (AVG) en overige toepasselijke privacywetgeving.",
       "1. Wie is verantwoordelijk voor de verwerking van uw persoonsgegevens?",
