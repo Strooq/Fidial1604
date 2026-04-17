@@ -650,21 +650,15 @@ function IntakeModal({
 function PolicyOverlay({ activePolicy, onClose }: { activePolicy: PolicyKey | null; onClose: () => void }) {
   const policy = useMemo(() => (activePolicy ? policyContent[activePolicy] : null), [activePolicy]);
 
-  const bodyLines = useMemo(() => {
-    if (!policy) return [] as string[];
-
-    const normalizedTitle = policy.title.trim().toLowerCase();
-    const normalizedIntro = policy.intro.trim().toLowerCase();
-
-    return policy.text.filter((line, index) => {
-      const normalized = line.trim().toLowerCase();
-      if (index === 0 && normalized === normalizedTitle) return false;
-      if (index === 1 && normalized === normalizedIntro) return false;
-      return true;
-    });
-  }, [policy]);
-
   if (!policy) return null;
+
+  const bodyLines = policy.text.filter((line) => {
+    const normalized = line.trim().toLowerCase();
+    return (
+      normalized !== policy.title.trim().toLowerCase() &&
+      normalized !== policy.intro.trim().toLowerCase()
+    );
+  });
 
   return (
     <div
