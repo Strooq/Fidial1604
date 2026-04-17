@@ -650,10 +650,19 @@ function IntakeModal({
 function PolicyOverlay({ activePolicy, onClose }: { activePolicy: PolicyKey | null; onClose: () => void }) {
   const policy = useMemo(() => (activePolicy ? policyContent[activePolicy] : null), [activePolicy]);
 
-  const title = policy?.text?.[0] ?? "";
-  const intro = policy?.text?.[1] ?? "";
-  const contentLines = policy?.text?.slice(2) ?? [];
-  const sections = useMemo(() => buildPolicySections(contentLines), [contentLines]);
+  const bodyLines = useMemo(() => {
+    if (!policy) return [] as string[];
+
+    const normalizedTitle = policy.title.trim().toLowerCase();
+    const normalizedIntro = policy.intro.trim().toLowerCase();
+
+    return policy.text.filter((line, index) => {
+      const normalized = line.trim().toLowerCase();
+      if (index === 0 && normalized === normalizedTitle) return false;
+      if (index === 1 && normalized === normalizedIntro) return false;
+      return true;
+    });
+  }, [policy]);
 
   if (!policy) return null;
 
@@ -663,56 +672,44 @@ function PolicyOverlay({ activePolicy, onClose }: { activePolicy: PolicyKey | nu
       onClick={onClose}
     >
       <div
-        className="relative flex h-[88vh] w-full max-w-6xl flex-col overflow-hidden rounded-[30px] border border-white/10 bg-slate-950 shadow-2xl"
+        className="relative flex h-[88vh] w-full max-w-5xl flex-col overflow-hidden rounded-[28px] border border-white/10 bg-slate-950 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="border-b border-white/10 bg-slate-950/95 px-6 py-5 backdrop-blur sm:px-8">
-          <div className="flex items-start justify-between gap-4">
-            <div className="max-w-3xl">
-              <div className="text-xs uppercase tracking-[0.22em] text-emerald-300">Beleidsdocument</div>
-              <h3 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">{title}</h3>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">{intro}</p>
-            </div>
-
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white"
-            >
-              Sluiten
-            </button>
+        <div className="flex items-start justify-between border-b border-white/10 bg-slate-950/95 px-6 py-5 backdrop-blur">
+          <div className="max-w-3xl">
+            <div className="text-xs uppercase tracking-[0.22em] text-emerald-300">Beleidsdocument</div>
+            <h3 className="mt-2 text-2xl font-semibold text-white">{policy.title}</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-300">{policy.intro}</p>
           </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white"
+          >
+            Sluiten
+          </button>
         </div>
 
         <div className="flex-1 overflow-y-auto bg-slate-900/60 px-6 py-6 sm:px-8">
-          <div className="space-y-4">
-            {sections.map((section, index) => (
-              <section
-                key={`${section.heading ?? "section"}-${index}`}
-                className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5 shadow-lg shadow-slate-950/10"
-              >
-                {section.heading && (
-                  <div className="border-b border-white/10 pb-3">
-                    <h4 className="text-lg font-semibold text-white">{section.heading}</h4>
-                  </div>
-                )}
+          <div className="rounded-[24px] border border-white/10 bg-white/[0.03] p-6 sm:p-7">
+            <div className="space-y-4">
+              {bodyLines.map((line, index) => {
+                const isHeading =
+                  /^Artikel\s+\d+[:]?/i.test(line) ||
+                  /^\d+\.\s+(?!\d)/.test(line);
 
-                <div className={section.heading ? "mt-4 space-y-3" : "space-y-3"}>
-                  {section.body.map((line, lineIndex) =>
-                    line.startsWith("- ") ? (
-                      <div key={lineIndex} className="flex items-start gap-3">
-                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                        <p className="text-sm leading-7 text-slate-300">{line.replace(/^- /, "")}</p>
-                      </div>
-                    ) : (
-                      <p key={lineIndex} className="text-sm leading-7 text-slate-300">
-                        {line}
-                      </p>
-                    )
-                  )}
-                </div>
-              </section>
-            ))}
+                return isHeading ? (
+                  <h4 key={index} className="pt-2 text-base font-semibold text-white first:pt-0">
+                    {line}
+                  </h4>
+                ) : (
+                  <p key={index} className="text-sm leading-7 text-slate-300">
+                    {line}
+                  </p>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
