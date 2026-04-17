@@ -35,7 +35,8 @@ type Service = {
 };
 
 type PolicyContent = {
-  mode?: "single";
+  title: string;
+  intro: string;
   text: string[];
 };
 
@@ -185,9 +186,10 @@ const cardClass =
 const CALENDLY_URL = "https://calendly.com/hello-fidial/30min";
 
 const policyContent: Record<PolicyKey, PolicyContent> = {
-  voorwaarden: {
-    mode: "single",
-    text: [
+voorwaarden: {
+  title: "Algemene voorwaarden",
+  intro: "Hieronder vindt u de algemene voorwaarden die op onze dienstverlening van toepassing zijn.",
+  text: [
       "Algemene voorwaarden van Fidial",
       "Hieronder vindt u de algemene voorwaarden die op onze dienstverlening van toepassing zijn.",
       "Artikel 1: Definities",
