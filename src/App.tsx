@@ -14,7 +14,7 @@ export default function App() {
     >
       <div>
         <p style={{ color: "#fb923c", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" }}>
-          STROOQ
+          FIDIAL
         </p>
         <h1 style={{ fontSize: "42px", margin: "16px 0 12px" }}>
           Under Construction
